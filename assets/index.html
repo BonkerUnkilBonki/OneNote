@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<title>OneNotes</title>
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<div id="app">
+
+  <!-- ==================== NOTES LIST ==================== -->
+  <section class="screen" id="s-list">
+    <div id="ptr"><div class="ptr-c"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11a8 8 0 0 0-14.9-2.7M4 13a8 8 0 0 0 14.9 2.7"/><path d="M4.5 3.5v5h5M19.5 20.5v-5h-5"/></svg></div></div>
+    <header id="hdr">
+      <div class="hdr-inner">
+        <div class="hdr-row">
+          <div class="hdr-left">
+            <h1 id="h-title">Notes</h1>
+            <div class="hdr-count" id="h-count"></div>
+          </div>
+          <button class="icon-btn ripple" id="btn-viewmode" aria-label="View mode"></button>
+          <button class="icon-btn ripple" id="btn-menu" aria-label="Menu">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="1.9" fill="currentColor"/><circle cx="12" cy="12" r="1.9" fill="currentColor"/><circle cx="12" cy="19" r="1.9" fill="currentColor"/></svg>
+          </button>
+        </div>
+        <div class="search" id="search-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><circle cx="11" cy="11" r="6.6"/><path d="M16.2 16.2L21 21"/></svg>
+          <input id="search-input" type="text" placeholder="Search" autocomplete="off">
+          <button id="search-clear" class="s-clear" aria-label="Clear">&times;</button>
+        </div>
+      </div>
+    </header>
+
+    <main id="list-scroll">
+      <div id="notes"></div>
+      <div id="empty" class="hidden">
+        <div class="empty-art">
+          <svg viewBox="0 0 120 120" fill="none">
+            <rect x="18" y="12" width="84" height="96" rx="16" fill="var(--surface)" stroke="var(--divider)" stroke-width="2"/>
+            <path d="M78 108v-18a10 10 0 0 1 10-10h14" stroke="var(--divider)" stroke-width="2" stroke-linejoin="round" transform="translate(-12,12)"/>
+            <rect x="36" y="34" width="48" height="7" rx="3.5" fill="var(--accent)" opacity="0.85"/>
+            <rect x="36" y="52" width="48" height="7" rx="3.5" fill="var(--accent)" opacity="0.55"/>
+            <rect x="36" y="70" width="30" height="7" rx="3.5" fill="var(--accent)" opacity="0.35"/>
+          </svg>
+        </div>
+        <div class="empty-t1" id="empty-t1">No notes yet</div>
+        <div class="empty-t2" id="empty-t2">Tap + to create your first note</div>
+      </div>
+    </main>
+
+    <nav id="nav">
+      <button class="seg-btn ripple active" data-filter="all">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"><path d="M5 4.5A1.5 1.5 0 0 1 6.5 3h11A1.5 1.5 0 0 1 19 4.5v14.7a1 1 0 0 1-1.55.83L12 16.7l-5.45 3.33A1 1 0 0 1 5 19.2z"/></svg>
+        All notes
+      </button>
+      <button class="seg-btn ripple" data-filter="tasks">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="4.5"/><path d="M8.5 12.2l2.6 2.6 4.6-5"/></svg>
+        Tasks
+      </button>
+      <button class="seg-btn ripple" data-filter="fav">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"><path d="M12 3.6l2.55 5.2 5.75.83-4.15 4.05.98 5.72L12 16.7l-5.13 2.7.98-5.72L3.7 9.63l5.75-.83z"/></svg>
+        Favourites
+      </button>
+    </nav>
+
+    <button id="fab" class="ripple" aria-label="New note">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+    </button>
+  </section>
+
+  <!-- ==================== NOTE VIEW ==================== -->
+  <section class="screen" id="s-view">
+    <header class="bar">
+      <button class="icon-btn ripple" id="btn-view-back" aria-label="Back">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>
+      </button>
+      <div class="grow"></div>
+      <button class="icon-btn ripple" id="btn-view-pin" aria-label="Pin"></button>
+      <button class="icon-btn ripple" id="btn-view-star" aria-label="Favourite"></button>
+      <button class="icon-btn ripple" id="btn-view-menu" aria-label="More">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="1.9" fill="currentColor"/><circle cx="12" cy="12" r="1.9" fill="currentColor"/><circle cx="12" cy="19" r="1.9" fill="currentColor"/></svg>
+      </button>
+    </header>
+    <div class="view-scroll" id="view-scroll">
+      <div id="v-cover" class="v-cover"></div>
+      <div class="v-head"><span id="v-icon" class="v-icon"></span></div>
+      <div id="v-title"></div>
+      <div id="v-body"></div>
+      <div id="v-meta" class="v-meta"></div>
+    </div>
+    <button id="v-fab" class="ripple">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>
+      Edit
+    </button>
+  </section>
+
+  <!-- ==================== EDITOR ==================== -->
+  <section class="screen" id="s-editor">
+    <header class="bar">
+      <button class="icon-btn ripple" id="btn-back" aria-label="Back">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>
+      </button>
+      <div class="grow"></div>
+      <button class="icon-btn ripple" id="btn-icon" aria-label="Note icon"></button>
+      <button class="icon-btn ripple" id="btn-star" aria-label="Favourite"></button>
+      <button class="icon-btn ripple" id="btn-note-menu" aria-label="More">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="1.9" fill="currentColor"/><circle cx="12" cy="12" r="1.9" fill="currentColor"/><circle cx="12" cy="19" r="1.9" fill="currentColor"/></svg>
+      </button>
+    </header>
+    <div class="editor-scroll" id="editor-scroll">
+      <input id="e-title" placeholder="Title" autocomplete="off" spellcheck="false">
+      <textarea id="e-body" placeholder="Start writing &mdash; type / for blocks" spellcheck="false"></textarea>
+    </div>
+    <div class="etools" id="etools">
+      <button class="etool" data-pre="- [ ] ">&#10003; Task</button>
+      <button class="etool" data-pre="- ">&#8226; List</button>
+      <button class="etool" data-pre="# ">H1</button>
+      <button class="etool" data-pre="## ">H2</button>
+      <button class="etool" data-pre="> ">&#10077; Quote</button>
+      <button class="etool" data-pre="---">&#8212; Divider</button>
+      <button class="etool" data-pre="!! ">&#128161; Callout</button>
+      <button class="etool" data-pre="tbl">&#9638; Table</button>
+      <button class="etool" data-pre="lnk">&#128279; Link note</button>
+      <button class="etool" data-pre="@">@ Date</button>
+    </div>
+    <div id="slash">
+      <div class="sl-head">Insert block</div>
+      <button class="sl-row" data-pre="- [ ] "><span class="sl-ic">&#10003;</span>Task</button>
+      <button class="sl-row" data-pre="- "><span class="sl-ic">&#8226;</span>Bulleted list</button>
+      <button class="sl-row" data-pre="# "><span class="sl-ic">H1</span>Heading 1</button>
+      <button class="sl-row" data-pre="## "><span class="sl-ic">H2</span>Heading 2</button>
+      <button class="sl-row" data-pre="> "><span class="sl-ic">&#10077;</span>Quote</button>
+      <button class="sl-row" data-pre="!! "><span class="sl-ic">&#128161;</span>Callout</button>
+      <button class="sl-row" data-pre="---"><span class="sl-ic">&#8212;</span>Divider</button>
+    </div>
+    <div class="edit-meta" id="e-meta"></div>
+  </section>
+
+  <!-- ==================== SETTINGS ==================== -->
+  <section class="screen" id="s-settings">
+    <header class="bar">
+      <button class="icon-btn ripple" id="btn-set-back" aria-label="Back">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>
+      </button>
+      <div class="bar-title">Settings</div>
+      <div class="grow"></div>
+    </header>
+
+    <div class="set-scroll" id="set-scroll">
+
+      <div class="set-sec">
+        <div class="set-title">Sync</div>
+        <div class="set-pad">
+          <div class="seg3" id="provider-seg">
+            <button data-p="github">GitHub</button>
+            <button data-p="webdav">WebDAV</button>
+          </div>
+
+          <div id="prov-github">
+            <label class="lbl">GitHub token</label>
+            <input class="field" id="f-token" type="password" autocomplete="off" spellcheck="false" placeholder="github_pat_&hellip;">
+            <label class="lbl">Repository</label>
+            <input class="field" id="f-repo" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="gitnotes-sync">
+            <div class="hint"><b>One-time setup on github.com:</b><br>
+            1. Create a <b>private</b> repo named <b>gitnotes-sync</b> &mdash; no README needed<br>
+            2. Create a token and include that repo in its Repository access, with <b>Contents: Read and write</b><br>
+            3. Paste the token here, then pull down on your notes to sync &mdash; same account on every device, and it takes over from there.</div>
+          </div>
+
+          <div id="prov-webdav" class="hidden">
+            <label class="lbl">Server address</label>
+            <input class="field" id="f-url" placeholder="https://dav.example.com/notes/" autocomplete="off" autocapitalize="off" spellcheck="false">
+            <label class="lbl">Username</label>
+            <input class="field" id="f-user" autocomplete="off" autocapitalize="off" spellcheck="false">
+            <label class="lbl">Password</label>
+            <input class="field" id="f-pass" type="password" autocomplete="off">
+            <div class="hint">Notes merge into a single <b>onenotes.json</b> file on any WebDAV server &mdash; Nextcloud, Koofr, TeraCloud or your own.</div>
+          </div>
+
+          <div class="set-row switch-row">
+            <div>Sync automatically on open</div>
+            <label class="switch"><input type="checkbox" id="f-autosync"><span></span></label>
+          </div>
+          <button class="btn-primary ripple" id="btn-sync-now">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11a8 8 0 0 0-14.9-2.7M4 13a8 8 0 0 0 14.9 2.7"/><path d="M4.5 3.5v5h5M19.5 20.5v-5h-5"/></svg>
+            Sync now
+          </button>
+        </div>
+      </div>
+
+      <div class="set-sec">
+        <div class="set-title">Appearance</div>
+        <div class="set-pad">
+          <div class="seg3 four" id="theme-seg">
+            <button data-t="system">System</button>
+            <button data-t="light">Light</button>
+            <button data-t="dark">Dark</button>
+            <button data-t="amoled">Pitch black</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="set-sec">
+        <div class="set-title">Backup</div>
+        <div class="set-rows">
+          <button class="set-action ripple" id="btn-export">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 10l5 5 5-5"/><path d="M4 19h16"/></svg>
+            Export notes to a file
+          </button>
+          <button class="set-action ripple" id="btn-import">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3M7 8l5-5 5 5"/><path d="M4 19h16"/></svg>
+            Import notes from a file
+          </button>
+        </div>
+      </div>
+
+      <div class="set-sec">
+        <div class="set-title">About</div>
+        <div class="set-pad about">
+          <div class="brand">OneNotes</div>
+          <div class="hint">v1.4 &middot; One UI&ndash;styled notes with GitHub sync<br>Built for Codenamezeroseven</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <div id="overlay"></div>
+  <div id="sheet">
+    <div class="handle"></div>
+    <div id="sheet-body"></div>
+  </div>
+  <div id="toast"><span id="toast-msg"></span><button id="toast-act"></button></div>
+
+</div>
+<script src="app.js"></script>
+</body>
+</html>
